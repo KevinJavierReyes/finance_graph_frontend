@@ -1,6 +1,14 @@
 async function requestExpensesData() {
+  // Obtener la cadena de consulta de la URL
+  const queryString = window.location.search;
+
+  // Crear un objeto URLSearchParams a partir de la cadena de consulta
+  const urlParams = new URLSearchParams(queryString);
+
+  // Obtener el valor del parámetro "secretCode"
+  const secretCode = urlParams.get("secretCode");
   const response = await fetch(
-    "https://vnxfdcuyu5.execute-api.us-east-1.amazonaws.com/dev/api/expenses",
+    `https://vnxfdcuyu5.execute-api.us-east-1.amazonaws.com/dev/api/expenses?secretCode=${secretCode}`,
     {
       method: "GET",
     }

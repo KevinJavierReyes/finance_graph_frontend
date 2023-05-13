@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="./index.js"></script>
+  </head>
+  <body>
+    <!-- <div style="display: flex; justify-content: center; width: 100%; font-weight: bold;">
+        <h3>Total Expenses <span id="total"></span></h3>
+    </div> -->
+    <div style="display: flex;">
+        <div id="expense_combo_chart" style="width: 100%; min-height: 500px;"></div>
+    </div>
+    <script>
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(requestDrawExpenseCharts);
+
+        async function requestDrawExpenseCharts() {
+            const expensesResult = await requestExpensesData();
+            const expensesComboGoogle = await toExpensesDataForComboGoogle(expensesResult.database, expensesResult.items);
+            drawExpenseComboChart(expensesComboGoogle.data);
+        }
+
+        function drawExpenseComboChart(expenses) {
+            const data = google.visualization.arrayToDataTable(expenses);
+
+            const options = {
+                title : 'Expenses by Month and Category',
+                vAxis: {title: 'Amount'},
+                hAxis: {title: 'Month'},
+                seriesType: 'bars',
+            };
+
+
+            const chart = new google.visualization.ComboChart(document.getElementById('expense_combo_chart'));
+
+            chart.draw(data, options);
+        }
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="./index.js"></script>
+  </head>
+  <body>
+    <!-- <div style="display: flex; justify-content: center; width: 100%; font-weight: bold;">
+        <h3>Total Expenses <span id="total"></span></h3>
+    </div> -->
+    <div style="display: flex;">
+        <div id="expense_area_chart" style="width: 100%; min-height: 500px;"></div>
+    </div>
+    <script>
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(requestDrawExpenseCharts);
+
+        async function requestDrawExpenseCharts() {
+            const expensesResult = await requestExpensesData();
+            const expensesAreaGoogle = await toExpensesDataForAreaGoogle(expensesResult.database, expensesResult.items);
+            
+            drawExpenseAreaChart(expensesAreaGoogle.data);
+        }
+
+
+
+        function drawExpenseAreaChart(area) {
+            var data = google.visualization.arrayToDataTable(area);
+
+            var options = {
+            title: 'Expenses by Month',
+            hAxis: {title: 'Month'},
+            vAxis: {minValue: 0}
+            };
+
+            var chart = new google.visualization.AreaChart(document.getElementById('expense_area_chart'));
+            chart.draw(data, options);
+        }
+    </script>
+  </body>
+</html>

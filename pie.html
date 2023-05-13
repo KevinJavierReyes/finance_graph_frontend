@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="./index.js"></script>
+  </head>
+  <body>
+    <!-- <div style="display: flex; justify-content: center; width: 100%; font-weight: bold;">
+        <h3>Total Expenses <span id="total"></span></h3>
+    </div> -->
+    <div style="display: flex;">
+        <div id="expense_pie_chart" style="width: 100%; min-height: 500px;"></div>
+    </div>
+    <script>
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(requestDrawExpenseCharts);
+
+        async function requestDrawExpenseCharts() {
+            const expensesResult = await requestExpensesData();
+            const expensesPieGoogle = await toExpensesDataForPieGoogle(expensesResult.database, expensesResult.items);
+    
+            if (expensesPieGoogle.pies.hasOwnProperty(`${new Date().getMonth()}`)){ 
+                drawExpensePieChart(expensesPieGoogle.pies[`${new Date().getMonth()}`]);
+            }
+        }
+
+        function drawExpensePieChart(pie) {
+            var data = google.visualization.arrayToDataTable(pie);
+
+            var options = {
+            title: 'Category Expenses',
+            is3D: true,
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('expense_pie_chart'));
+            chart.draw(data, options);
+        }
+        
+    </script>
+  </body>
+</html>
